@@ -201,8 +201,8 @@ end
 
 ```rb
 require 'appydays/loggable/sidekiq_job_logger'
-Sidekiq.logger = Appydays::Loggable::SidekiqJobLogger.logger
 Sidekiq.configure_server do |config|
+  config.options[:logger] = Appydays::Loggable::SidekiqJobLogger.logger
   config.options[:job_logger] = Appydays::Loggable::SidekiqJobLogger::JobLogger
   # We do NOT want the unstructured default error handler
   config.error_handlers.replace([Appydays::Loggable::SidekiqJobLogger::JobLogger.method(:error_handler)])
@@ -225,8 +225,8 @@ class AppJobLogger < Appydays::Loggable::SidekiqJobLogger
   end
 end
 
-Sidekiq.logger = AppJobLogger.logger
 Sidekiq.configure_server do |config|
+  config.options[:logger] = AppJobLogger.logger
   config.options[:job_logger] = AppJobLogger::JobLogger
   # We do NOT want the unstructured default error handler
   config.error_handlers.replace([AppJobLogger::JobLogger.method(:error_handler)])

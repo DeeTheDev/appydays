@@ -3,6 +3,7 @@
 require "sidekiq"
 require "sidekiq/version"
 require "sidekiq/job_logger"
+require "sidekiq/component"
 
 require "appydays/loggable"
 require "appydays/configurable"
@@ -10,15 +11,7 @@ require "appydays/configurable"
 class Appydays::Loggable::SidekiqJobLogger < Sidekiq::JobLogger
   include Appydays::Configurable
   include Appydays::Loggable
-  begin
-    require "sidekiq/util"
-    include Sidekiq::Util
-  rescue LoadError
-    require "sidekiq/component"
-    include Sidekiq::Component
-  end
-
-  Sidekiq.logger = self.logger
+  include Sidekiq::Component
 
   def call(item, _queue, &)
     start = self.now

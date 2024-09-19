@@ -284,8 +284,7 @@ RSpec.describe Appydays::Loggable do
       end
     end
 
-    let(:logger) { logcls.new }
-
+    let(:logger) { logcls.new(Sidekiq.default_configuration) }
     def log(&block)
       block ||= proc {}
       lines = capture_logs_from(logcls.logger, formatter: :json) do
